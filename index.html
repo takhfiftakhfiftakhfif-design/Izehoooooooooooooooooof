@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>تخفیفات ایذه</title>
     
-    <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/takhfiftakhfiftakhfif-design/Izehoooooooooooooooooof/refs/heads/main/1767786015699.jpg">
+    <link rel="manifest" href="manifest.json?v=1.1">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/takhfiftakhfiftakhfif-design/Izehoooooooooooooooooof/refs/heads/main/1767786015699.jpg">
 
     <meta name="theme-color" content="#ff3e3e">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="icon-discount.png">
 
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
     <style>
@@ -96,19 +95,30 @@
         const totalTime = 7000;
         let deferredPrompt;
 
+        // ورژن داینامیک برای آپدیت فوری فایل‌ها
+        const v = Date.now();
+
         async function init() {
-            fetch('config.json?v=' + Date.now()).then(r => r.json()).then(d => document.getElementById('mq').innerText = d.marquee).catch(() => {});
-            for (let i = 1; i <= 60; i++) await fetchItem(i);
+            fetch('config.json?v=' + v, {cache: "no-store"}).then(r => r.json()).then(d => {
+                document.getElementById('mq').innerText = d.marquee;
+                // اگر فایل کانفیگ دارای total باشد، آن را می‌خواند
+                const total = d.totalOffers || 60;
+                loadItems(total);
+            }).catch(() => loadItems(60));
+        }
+
+        async function loadItems(count) {
+            for (let i = 1; i <= count; i++) await fetchItem(i);
         }
 
         async function fetchItem(id) {
             try {
-                const r = await fetch(`${id}.json?v=${Date.now()}`);
+                const r = await fetch(`${id}.json?v=${v}`, {cache: "no-store"});
                 if (!r.ok) return;
                 const data = await r.json();
                 db[id] = data;
                 const isVid = data.img.toLowerCase().endsWith('.mp4');
-                const media = isVid ? `<video muted autoplay loop playsinline><source src="${data.img}"></video>` : `<img src="${data.img}" loading="lazy">`;
+                const media = isVid ? `<video muted autoplay loop playsinline><source src="${data.img}?v=${v}"></video>` : `<img src="${data.img}?v=${v}" loading="lazy">`;
                 const html = id <= 10 
                     ? `<div class="story-circle" onclick="openModal(${id})">${media}<span>${data.name}</span></div>`
                     : `<div class="offer-card" onclick="openModal(${id})">${data.off ? `<div class="off-tag">${data.off}</div>` : ''}${media}<div class="card-info">${data.name}</div></div>`;
@@ -120,7 +130,7 @@
             const item = db[id];
             if(!item) return;
             const isVid = item.img.toLowerCase().endsWith('.mp4');
-            document.getElementById('media-view').innerHTML = isVid ? `<video id="m-video" autoplay playsinline class="modal-media"><source src="${item.img}"></video>` : `<img src="${item.img}" class="modal-media">`;
+            document.getElementById('media-view').innerHTML = isVid ? `<video id="m-video" autoplay playsinline class="modal-media"><source src="${item.img}?v=${v}"></video>` : `<img src="${item.img}?v=${v}" class="modal-media">`;
             document.getElementById('m-name').innerText = item.name;
             document.getElementById('m-desc').innerText = item.desc;
             document.getElementById('m-link').href = "tel:" + item.phone;
@@ -138,8 +148,8 @@
             modal.style.display = 'none';
             document.body.style.overflow = 'auto';
             clearInterval(timer);
-            const v = document.getElementById('m-video');
-            if(v) v.pause();
+            const vMod = document.getElementById('m-video');
+            if(vMod) vMod.pause();
             if (doBack && window.history.state && window.history.state.modalOpen) window.history.back();
         }
 
