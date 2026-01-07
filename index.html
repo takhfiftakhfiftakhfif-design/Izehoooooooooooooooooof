@@ -17,46 +17,44 @@
         :root { --main: #ff3e3e; --bg: #1e293b; --card: #334155; --accent: #00f2fe; --text: #f1f5f9; }
         body { font-family: Vazirmatn, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 20px; overflow-x: hidden; direction: rtl; -webkit-tap-highlight-color: transparent; }
         
-        /* Header */
         .site-header { text-align: center; padding: 25px 10px 10px; background: linear-gradient(to bottom, #0f172a, var(--bg)); }
         .site-title { font-size: 28px; font-weight: 900; color: var(--main); margin: 0; }
 
-        /* Marquee */
         .marquee-container { background: #000; color: #fbbf24; padding: 12px 0; overflow: hidden; border-top: 1px solid #475569; border-bottom: 1px solid #475569; margin-top: 10px; }
         .marquee-content { display: inline-block; white-space: nowrap; animation: scroll-text 18s linear infinite; font-size: 14px; font-weight: bold; }
         @keyframes scroll-text { from { transform: translateX(-100%); } to { transform: translateX(100vw); } }
 
-        /* Stories */
         .story-bar { display: flex; gap: 15px; padding: 20px 15px; overflow-x: auto; scrollbar-width: none; }
         .story-bar::-webkit-scrollbar { display: none; }
         .story-circle { min-width: 72px; text-align: center; cursor: pointer; }
         .story-circle img, .story-circle video { width: 68px; height: 68px; border-radius: 50%; border: 3px solid var(--main); object-fit: cover; padding: 2px; background: #fff; }
         .story-circle span { font-size: 11px; display: block; margin-top: 8px; font-weight: 500; }
 
-        /* Grid */
         .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 14px; }
         .offer-card { background: var(--card); border-radius: 22px; overflow: hidden; position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
         .offer-card img, .offer-card video { width: 100%; height: 165px; object-fit: cover; }
         .card-info { padding: 14px; text-align: center; font-size: 13px; font-weight: bold; }
         .off-tag { position: absolute; top: 12px; left: 12px; background: var(--main); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 900; z-index: 5; }
 
-        /* Modal */
-        #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; }
+        /* Refresh Button & Tip */
+        .refresh-container { position: fixed; bottom: 85px; left: 20px; display: flex; align-items: center; gap: 10px; z-index: 15000; }
+        .refresh-tip { background: rgba(0,0,0,0.7); color: white; font-size: 10px; padding: 5px 10px; border-radius: 8px; white-space: nowrap; pointer-events: none; opacity: 0.8; }
+        .refresh-btn { width: 45px; height: 45px; background: var(--main); border: none; border-radius: 50%; color: white; font-size: 20px; cursor: pointer; box-shadow: 0 4px 15px rgba(255,62,62,0.4); display: flex; align-items: center; justify-content: center; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,62,62,0.7); } 70% { box-shadow: 0 0 0 10px rgba(255,62,62,0); } 100% { box-shadow: 0 0 0 0 rgba(255,62,62,0); } }
+        .rotating { animation: rotate 0.6s linear infinite !important; }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
+
+        #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; }
         .progress-bar { position: absolute; top: 12px; left: 12px; right: 12px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; }
         #progress-fill { height: 100%; background: #fff; width: 0%; transition: width 0.1s linear; }
-        
         .modal-body { height: 100%; display: flex; flex-direction: column; }
         .media-viewer { flex: 2; display: flex; align-items: center; justify-content: center; padding-top: 30px; pointer-events: none; }
         .modal-media { max-width: 95%; max-height: 95%; border-radius: 15px; object-fit: contain; }
-        
-        /* Info Panel & Buttons */
         .info-panel { flex: 1; background: var(--bg); border-top: 3px solid var(--main); padding: 25px; border-radius: 35px 35px 0 0; margin-top: -20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.5); }
         .modal-btns { display: flex; gap: 10px; margin-top: 15px; }
         .btn-call { flex: 3; background: #22c55e; color: white; text-align: center; padding: 16px; border-radius: 15px; text-decoration: none; font-weight: bold; font-size: 16px; }
         .btn-close-text { flex: 1; background: #475569; color: white; border: none; padding: 16px; border-radius: 15px; font-weight: bold; font-size: 15px; cursor: pointer; font-family: Vazirmatn; }
-
-        /* Install Banner */
-        #install-banner { display: none; position: fixed; bottom: 25px; left: 20px; right: 20px; background: #f8fafc; color: #1e293b; padding: 18px; border-radius: 22px; z-index: 20000; align-items: center; justify-content: space-between; box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
+        #install-banner { display: none; position: fixed; bottom: 25px; left: 20px; right: 20px; background: #f8fafc; color: #1e293b; padding: 18px; border-radius: 22px; z-index: 25000; align-items: center; justify-content: space-between; box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
         #setup-button { background: var(--main); color: white; border: none; padding: 10px 20px; border-radius: 12px; font-weight: bold; }
     </style>
 </head>
@@ -64,6 +62,12 @@
 
     <header class="site-header"><h1 class="site-title">تخفیفات ایذه</h1></header>
     <div class="marquee-container"><div class="marquee-content" id="mq">در حال بارگذاری جدیدترین‌ها...</div></div>
+    
+    <div class="refresh-container">
+        <div class="refresh-tip">بزن رو دکمه اگه تخفیفی بود ببینی 👇</div>
+        <button class="refresh-btn" onclick="hardRefresh()" id="ref-btn">🔄</button>
+    </div>
+
     <div class="story-bar" id="stories"></div>
     <div class="main-grid" id="offers"></div>
 
@@ -74,51 +78,46 @@
             <div class="info-panel">
                 <h2 id="m-name" style="margin:0; color:var(--accent); font-size: 20px;"></h2>
                 <div id="m-desc" style="margin-top:10px; font-size:14px; color:#cbd5e1; line-height:1.6; max-height: 80px; overflow-y: auto;"></div>
-                
                 <div class="modal-btns">
                     <a id="m-link" class="btn-call">📞 تماس</a>
                     <button class="btn-close-text" onclick="closeModal(true)">بستن</button>
                 </div>
-                <p style="text-align: center; font-size: 11px; opacity: 0.4; margin-top: 10px;">برای توقف موقت، انگشت خود را نگه دارید</p>
             </div>
         </div>
     </div>
 
     <div id="install-banner">
         <span style="font-size:14px; font-weight:900;">📲 نصب اپلیکیشن ایذه</span>
-        <button id="setup-button">نصب (با تخفیف)</button>
+        <button id="setup-button">نصب</button>
     </div>
 
     <script>
         let db = {};
         let timer, progress = 0, isPaused = false;
-        const totalTime = 7000;
         let deferredPrompt;
 
-        // ورژن داینامیک برای آپدیت فوری فایل‌ها
-        const v = Date.now();
-
         async function init() {
+            const v = Date.now();
             fetch('config.json?v=' + v, {cache: "no-store"}).then(r => r.json()).then(d => {
                 document.getElementById('mq').innerText = d.marquee;
-                // اگر فایل کانفیگ دارای total باشد، آن را می‌خواند
-                const total = d.totalOffers || 60;
-                loadItems(total);
-            }).catch(() => loadItems(60));
+                loadItems(d.totalOffers || 60, v);
+            }).catch(() => loadItems(60, v));
         }
 
-        async function loadItems(count) {
-            for (let i = 1; i <= count; i++) await fetchItem(i);
+        async function loadItems(count, version) {
+            document.getElementById('stories').innerHTML = '';
+            document.getElementById('offers').innerHTML = '';
+            for (let i = 1; i <= count; i++) await fetchItem(i, version);
         }
 
-        async function fetchItem(id) {
+        async function fetchItem(id, version) {
             try {
-                const r = await fetch(`${id}.json?v=${v}`, {cache: "no-store"});
+                const r = await fetch(`${id}.json?v=${version}`, {cache: "no-store"});
                 if (!r.ok) return;
                 const data = await r.json();
                 db[id] = data;
                 const isVid = data.img.toLowerCase().endsWith('.mp4');
-                const media = isVid ? `<video muted autoplay loop playsinline><source src="${data.img}?v=${v}"></video>` : `<img src="${data.img}?v=${v}" loading="lazy">`;
+                const media = isVid ? `<video muted autoplay loop playsinline><source src="${data.img}?v=${version}"></video>` : `<img src="${data.img}?v=${version}" loading="lazy">`;
                 const html = id <= 10 
                     ? `<div class="story-circle" onclick="openModal(${id})">${media}<span>${data.name}</span></div>`
                     : `<div class="offer-card" onclick="openModal(${id})">${data.off ? `<div class="off-tag">${data.off}</div>` : ''}${media}<div class="card-info">${data.name}</div></div>`;
@@ -126,9 +125,18 @@
             } catch (e) {}
         }
 
+        function hardRefresh() {
+            const btn = document.getElementById('ref-btn');
+            btn.classList.add('rotating');
+            init().then(() => {
+                setTimeout(() => btn.classList.remove('rotating'), 1000);
+            });
+        }
+
         function openModal(id) {
             const item = db[id];
             if(!item) return;
+            const v = Date.now();
             const isVid = item.img.toLowerCase().endsWith('.mp4');
             document.getElementById('media-view').innerHTML = isVid ? `<video id="m-video" autoplay playsinline class="modal-media"><source src="${item.img}?v=${v}"></video>` : `<img src="${item.img}?v=${v}" class="modal-media">`;
             document.getElementById('m-name').innerText = item.name;
@@ -139,8 +147,6 @@
             window.history.pushState({ modalOpen: true }, "");
             startTimer();
         }
-
-        window.addEventListener('popstate', () => closeModal(false));
 
         function closeModal(doBack = true) {
             const modal = document.getElementById('modal');
@@ -153,6 +159,8 @@
             if (doBack && window.history.state && window.history.state.modalOpen) window.history.back();
         }
 
+        window.addEventListener('popstate', () => closeModal(false));
+
         function startTimer() {
             progress = 0; isPaused = false; clearInterval(timer);
             timer = setInterval(() => {
@@ -161,7 +169,7 @@
                     document.getElementById('progress-fill').style.width = progress + '%';
                     if (progress >= 100) closeModal(true);
                 }
-            }, totalTime / 100);
+            }, 70);
         }
 
         const touchZone = document.getElementById('modal-touch-zone');
