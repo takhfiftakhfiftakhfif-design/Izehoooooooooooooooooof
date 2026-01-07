@@ -4,8 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>تخفیفات ایذه</title>
-    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    
     <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff3e3e">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon-discount.png">
+
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
     <style>
         :root { --main: #ff3e3e; --bg: #1e293b; --card: #334155; --accent: #00f2fe; --text: #f1f5f9; }
         body { font-family: Vazirmatn, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 20px; overflow-x: hidden; direction: rtl; -webkit-tap-highlight-color: transparent; }
@@ -79,7 +85,7 @@
 
     <div id="install-banner">
         <span style="font-size:14px; font-weight:900;">📲 نصب اپلیکیشن ایذه</span>
-        <button id="setup-button">نصب</button>
+        <button id="setup-button">نصب (با تخفیف)</button>
     </div>
 
     <script>
@@ -88,7 +94,6 @@
         const totalTime = 7000;
         let deferredPrompt;
 
-        // بارگذاری اولیه
         async function init() {
             fetch('config.json?v=' + Date.now()).then(r => r.json()).then(d => document.getElementById('mq').innerText = d.marquee).catch(() => {});
             for (let i = 1; i <= 60; i++) await fetchItem(i);
@@ -100,63 +105,44 @@
                 if (!r.ok) return;
                 const data = await r.json();
                 db[id] = data;
-
                 const isVid = data.img.toLowerCase().endsWith('.mp4');
                 const media = isVid ? `<video muted autoplay loop playsinline><source src="${data.img}"></video>` : `<img src="${data.img}" loading="lazy">`;
-
                 const html = id <= 10 
                     ? `<div class="story-circle" onclick="openModal(${id})">${media}<span>${data.name}</span></div>`
                     : `<div class="offer-card" onclick="openModal(${id})">${data.off ? `<div class="off-tag">${data.off}</div>` : ''}${media}<div class="card-info">${data.name}</div></div>`;
-                
                 document.getElementById(id <= 10 ? 'stories' : 'offers').innerHTML += html;
             } catch (e) {}
         }
 
-        // مدیریت مودال و تاریخچه (برای دکمه برگشت گوشی)
         function openModal(id) {
             const item = db[id];
             if(!item) return;
-
             const isVid = item.img.toLowerCase().endsWith('.mp4');
             document.getElementById('media-view').innerHTML = isVid ? `<video id="m-video" autoplay playsinline class="modal-media"><source src="${item.img}"></video>` : `<img src="${item.img}" class="modal-media">`;
             document.getElementById('m-name').innerText = item.name;
             document.getElementById('m-desc').innerText = item.desc;
             document.getElementById('m-link').href = "tel:" + item.phone;
-            
             document.getElementById('modal').style.display = 'block';
             document.body.style.overflow = 'hidden';
-
-            // اضافه کردن وضعیت به تاریخچه
             window.history.pushState({ modalOpen: true }, "");
-            
             startTimer();
         }
 
-        // گوش دادن به دکمه Back گوشی
-        window.addEventListener('popstate', function() {
-            closeModal(false); 
-        });
+        window.addEventListener('popstate', () => closeModal(false));
 
         function closeModal(doBack = true) {
             const modal = document.getElementById('modal');
             if (modal.style.display === 'none') return;
-
             modal.style.display = 'none';
             document.body.style.overflow = 'auto';
             clearInterval(timer);
             const v = document.getElementById('m-video');
             if(v) v.pause();
-
-            if (doBack && window.history.state && window.history.state.modalOpen) {
-                window.history.back();
-            }
+            if (doBack && window.history.state && window.history.state.modalOpen) window.history.back();
         }
 
-        // تایمر و مکانیزم توقف
         function startTimer() {
-            progress = 0;
-            isPaused = false;
-            clearInterval(timer);
+            progress = 0; isPaused = false; clearInterval(timer);
             timer = setInterval(() => {
                 if (!isPaused) {
                     progress += 1;
@@ -167,20 +153,9 @@
         }
 
         const touchZone = document.getElementById('modal-touch-zone');
-        const pauseEvents = ['touchstart', 'mousedown'];
-        const resumeEvents = ['touchend', 'mouseup'];
+        ['touchstart', 'mousedown'].forEach(ev => touchZone.addEventListener(ev, (e) => { if(e.target.tagName !== 'A' && e.target.tagName !== 'BUTTON') isPaused = true; }));
+        ['touchend', 'mouseup'].forEach(ev => touchZone.addEventListener(ev, () => isPaused = false));
 
-        pauseEvents.forEach(ev => {
-            touchZone.addEventListener(ev, (e) => {
-                if(e.target.tagName !== 'A' && e.target.tagName !== 'BUTTON') isPaused = true;
-            });
-        });
-
-        resumeEvents.forEach(ev => {
-            touchZone.addEventListener(ev, () => isPaused = false);
-        });
-
-        // PWA
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault(); deferredPrompt = e;
             document.getElementById('install-banner').style.display = 'flex';
