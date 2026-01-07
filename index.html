@@ -52,7 +52,7 @@
         .modal-media { max-width: 95%; max-height: 95%; border-radius: 15px; object-fit: contain; }
         .info-panel { flex: 1; background: var(--bg); border-top: 3px solid var(--main); padding: 25px; border-radius: 35px 35px 0 0; margin-top: -20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.5); }
         .modal-btns { display: flex; gap: 10px; margin-top: 15px; }
-        .btn-call { flex: 3; background: #22c55e; color: white; text-align: center; padding: 16px; border-radius: 15px; text-decoration: none; font-weight: bold; font-size: 16px; }
+        .btn-call { flex: 3; background: #22c55e; color: white; text-align: center; padding: 16px; border-radius: 15px; text-decoration: none; font-weight: bold; font-size: 16px; transition: 0.3s; }
         .btn-close-text { flex: 1; background: #475569; color: white; border: none; padding: 16px; border-radius: 15px; font-weight: bold; font-size: 15px; cursor: pointer; font-family: Vazirmatn; }
         #install-banner { display: none; position: fixed; bottom: 25px; left: 20px; right: 20px; background: #f8fafc; color: #1e293b; padding: 18px; border-radius: 22px; z-index: 25000; align-items: center; justify-content: space-between; box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
         #setup-button { background: var(--main); color: white; border: none; padding: 10px 20px; border-radius: 12px; font-weight: bold; }
@@ -141,7 +141,29 @@
             document.getElementById('media-view').innerHTML = isVid ? `<video id="m-video" autoplay playsinline class="modal-media"><source src="${item.img}?v=${v}"></video>` : `<img src="${item.img}?v=${v}" class="modal-media">`;
             document.getElementById('m-name').innerText = item.name;
             document.getElementById('m-desc').innerText = item.desc;
-            document.getElementById('m-link').href = "tel:" + item.phone;
+            
+            // اصلاح هوشمند دکمه ارتباطی
+            const linkBtn = document.getElementById('m-link');
+            const val = item.phone; 
+            
+            if (val.includes('instagram.com')) {
+                linkBtn.innerText = "📸 اینستاگرام";
+                linkBtn.style.background = "linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)";
+                linkBtn.href = val;
+            } else if (val.includes('t.me')) {
+                linkBtn.innerText = "✈️ تلگرام";
+                linkBtn.style.background = "#0088cc";
+                linkBtn.href = val;
+            } else if (val.includes('wa.me') || val.includes('whatsapp.com')) {
+                linkBtn.innerText = "💬 واتس‌اپ";
+                linkBtn.style.background = "#25d366";
+                linkBtn.href = val;
+            } else {
+                linkBtn.innerText = "📞 تماس مستقیم";
+                linkBtn.style.background = "#22c55e";
+                linkBtn.href = "tel:" + val;
+            }
+
             document.getElementById('modal').style.display = 'block';
             document.body.style.overflow = 'hidden';
             window.history.pushState({ modalOpen: true }, "");
