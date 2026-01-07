@@ -1,19 +1,15 @@
 {
-  "short_name": "تخفیفات ایذه",
-  "name": "تخفیفات ایذه",
+  "short_name": "Izeh Off",
+  "name": "Izeh Off Discount",
   "icons": [
     {
-      "src": "icon-discount.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icon-discount.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "src": "https://raw.githubusercontent.com/takhfiftakhfiftakhfif-design/Izehoooooooooooooooooof/refs/heads/main/1767786015699.jpg",
+      "sizes": "1024x1024",
+      "type": "image/jpeg",
+      "purpose": "any"
     }
   ],
-  "start_url": ".",
+  "start_url": "./index.html",
   "display": "standalone",
   "theme_color": "#ff3e3e",
   "background_color": "#1e293b"
