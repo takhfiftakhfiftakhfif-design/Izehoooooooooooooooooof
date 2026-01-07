@@ -7,86 +7,53 @@
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
     <style>
-        :root { 
-            --main: #ff3e3e; 
-            --bg: #1e293b; /* تم روشن‌تر و شیک‌تر */
-            --card: #334155; 
-            --accent: #00f2fe;
-            --text: #f1f5f9;
-        }
+        :root { --main: #ff3e3e; --bg: #1e293b; --card: #334155; --accent: #00f2fe; --text: #f1f5f9; }
+        body { font-family: Vazirmatn, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 20px; overflow-x: hidden; direction: rtl; -webkit-tap-highlight-color: transparent; }
         
-        body { 
-            font-family: Vazirmatn, sans-serif; 
-            background: var(--bg); 
-            color: var(--text); 
-            margin: 0; 
-            padding-bottom: 20px; 
-            overflow-x: hidden; 
-            direction: rtl; 
-        }
+        .site-header { text-align: center; padding: 25px 10px 10px; background: linear-gradient(to bottom, #0f172a, var(--bg)); }
+        .site-title { font-size: 28px; font-weight: 900; color: var(--main); margin: 0; }
 
-        /* هدر جذاب‌تر */
-        .site-header { 
-            text-align: center; 
-            padding: 25px 10px 10px; 
-            background: linear-gradient(to bottom, #0f172a, var(--bg)); 
-        }
-        .site-title { font-size: 28px; font-weight: 900; color: var(--main); margin: 0; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-
-        /* متن روان با رنگ طلایی برای خوانایی */
         .marquee-container { background: #000; color: #fbbf24; padding: 12px 0; overflow: hidden; border-top: 1px solid #475569; border-bottom: 1px solid #475569; margin-top: 10px; }
         .marquee-content { display: inline-block; white-space: nowrap; animation: scroll-text 18s linear infinite; font-size: 14px; font-weight: bold; }
         @keyframes scroll-text { from { transform: translateX(-100%); } to { transform: translateX(100vw); } }
 
-        /* استوری‌ها */
         .story-bar { display: flex; gap: 15px; padding: 20px 15px; overflow-x: auto; scrollbar-width: none; }
         .story-bar::-webkit-scrollbar { display: none; }
-        .story-circle { min-width: 72px; text-align: center; cursor: pointer; animation: fadeIn 0.5s ease; }
+        .story-circle { min-width: 72px; text-align: center; cursor: pointer; }
         .story-circle img, .story-circle video { width: 68px; height: 68px; border-radius: 50%; border: 3px solid var(--main); object-fit: cover; padding: 2px; background: #fff; }
         .story-circle span { font-size: 11px; display: block; margin-top: 8px; font-weight: 500; }
 
-        /* کارت‌های شبکه */
         .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 14px; }
-        .offer-card { background: var(--card); border-radius: 22px; overflow: hidden; position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.2); animation: fadeIn 0.8s ease; border: 1px solid rgba(255,255,255,0.05); }
+        .offer-card { background: var(--card); border-radius: 22px; overflow: hidden; position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
         .offer-card img, .offer-card video { width: 100%; height: 165px; object-fit: cover; }
-        .card-info { padding: 14px; text-align: center; font-size: 13px; font-weight: bold; color: #fff; }
-        .off-tag { position: absolute; top: 12px; left: 12px; background: var(--main); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 900; z-index: 5; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+        .card-info { padding: 14px; text-align: center; font-size: 13px; font-weight: bold; }
+        .off-tag { position: absolute; top: 12px; left: 12px; background: var(--main); color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 900; z-index: 5; }
 
-        /* مودال (نمایش بزرگ) */
-        #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; }
+        /* Modal */
+        #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; touch-action: none; }
         .progress-bar { position: absolute; top: 12px; left: 12px; right: 12px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; }
-        #progress-fill { height: 100%; background: #fff; width: 0%; }
+        #progress-fill { height: 100%; background: #fff; width: 0%; transition: width 0.1s linear; }
         .modal-body { height: 100%; display: flex; flex-direction: column; }
-        .media-viewer { flex: 2; display: flex; align-items: center; justify-content: center; padding-top: 40px; }
+        .media-viewer { flex: 2; display: flex; align-items: center; justify-content: center; padding-top: 40px; pointer-events: none; }
         .modal-media { max-width: 95%; max-height: 95%; border-radius: 15px; object-fit: contain; }
-        .info-panel { flex: 1; background: var(--bg); border-top: 3px solid var(--main); padding: 30px 25px; border-radius: 35px 35px 0 0; margin-top: -20px; box-shadow: 0 -10px 40px rgba(0,0,0,0.5); }
-        .btn-call { display: block; background: #22c55e; color: white; text-align: center; padding: 18px; border-radius: 18px; text-decoration: none; font-weight: bold; font-size: 16px; margin-top: 10px; }
+        .info-panel { flex: 1; background: var(--bg); border-top: 3px solid var(--main); padding: 30px 25px; border-radius: 35px 35px 0 0; margin-top: -20px; }
+        .btn-call { display: block; background: #22c55e; color: white; text-align: center; padding: 18px; border-radius: 18px; text-decoration: none; font-weight: bold; font-size: 16px; }
         .close-x { width: 45px; height: 45px; border-radius: 50%; border: 1px solid #444; background: rgba(255,255,255,0.1); color: white; font-size: 18px; cursor: pointer; margin: 20px auto 0; display: block; }
 
-        /* بنر نصب هوشمند (روشن) */
-        #install-banner { display: none; position: fixed; bottom: 25px; left: 20px; right: 20px; background: #f8fafc; color: #1e293b; padding: 18px; border-radius: 22px; z-index: 20000; align-items: center; justify-content: space-between; box-shadow: 0 15px 40px rgba(0,0,0,0.4); animation: slideUp 0.5s ease; }
-        #setup-button { background: var(--main); color: white; border: none; padding: 10px 20px; border-radius: 12px; font-weight: bold; cursor: pointer; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideUp { from { transform: translateY(100px); } to { transform: translateY(0); } }
+        #install-banner { display: none; position: fixed; bottom: 25px; left: 20px; right: 20px; background: #f8fafc; color: #1e293b; padding: 18px; border-radius: 22px; z-index: 20000; align-items: center; justify-content: space-between; box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
+        #setup-button { background: var(--main); color: white; border: none; padding: 10px 20px; border-radius: 12px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <header class="site-header">
-        <h1 class="site-title">تخفیفات ایذه</h1>
-    </header>
-
-    <div class="marquee-container">
-        <div class="marquee-content" id="mq">در حال دریافت جدیدترین فرصت‌ها...</div>
-    </div>
-
+    <header class="site-header"><h1 class="site-title">تخفیفات ایذه</h1></header>
+    <div class="marquee-container"><div class="marquee-content" id="mq">در حال بارگذاری...</div></div>
     <div class="story-bar" id="stories"></div>
     <div class="main-grid" id="offers"></div>
 
     <div id="modal">
         <div class="progress-bar"><div id="progress-fill"></div></div>
-        <div class="modal-body">
+        <div class="modal-body" id="modal-touch-zone">
             <div class="media-viewer" id="media-view"></div>
             <div class="info-panel">
                 <h2 id="m-name" style="margin:0; color:var(--accent); font-size: 22px;"></h2>
@@ -98,25 +65,21 @@
     </div>
 
     <div id="install-banner">
-        <span style="font-size:14px; font-weight:900;">📲 نصب اپلیکیشن تخفیفات ایذه</span>
-        <button id="setup-button">نصب سریع</button>
+        <span style="font-size:14px; font-weight:900;">📲 نصب اپلیکیشن ایذه</span>
+        <button id="setup-button">نصب</button>
     </div>
 
     <script>
         let db = {};
-        let timer, progress = 0;
-        let deferredPrompt;
+        let timer, progress = 0, isPaused = false;
+        const totalTime = 7000; // ۷ ثانیه
 
         async function init() {
-            // ۱. لود متن روان
             fetch('config.json?v=' + Date.now()).then(r => r.json()).then(d => document.getElementById('mq').innerText = d.marquee).catch(() => {});
-
-            // ۲. لود فایل‌های ۱ تا ۶۰ (بدون شرط وضعیت)
-            for (let i = 1; i <= 10; i++) await fetchItem(i, 'story');
-            for (let i = 11; i <= 60; i++) await fetchItem(i, 'offer');
+            for (let i = 1; i <= 60; i++) await fetchItem(i);
         }
 
-        async function fetchItem(id, type) {
+        async function fetchItem(id) {
             try {
                 const r = await fetch(`${id}.json?v=${Date.now()}`);
                 if (!r.ok) return;
@@ -126,55 +89,68 @@
                 const isVid = data.img.toLowerCase().endsWith('.mp4');
                 const media = isVid ? `<video muted autoplay loop playsinline><source src="${data.img}"></video>` : `<img src="${data.img}" loading="lazy">`;
 
-                if (type === 'story') {
-                    document.getElementById('stories').innerHTML += `<div class="story-circle" onclick="openModal(${id})">${media}<span>${data.name}</span></div>`;
-                } else {
-                    const tag = data.off ? `<div class="off-tag">${data.off}</div>` : '';
-                    document.getElementById('offers').innerHTML += `<div class="offer-card" onclick="openModal(${id})">${tag}${media}<div class="card-info">${data.name}</div></div>`;
-                }
+                const html = id <= 10 
+                    ? `<div class="story-circle" onclick="openModal(${id})">${media}<span>${data.name}</span></div>`
+                    : `<div class="offer-card" onclick="openModal(${id})">${data.off ? `<div class="off-tag">${data.off}</div>` : ''}${media}<div class="card-info">${data.name}</div></div>`;
+                
+                document.getElementById(id <= 10 ? 'stories' : 'offers').innerHTML += html;
             } catch (e) {}
         }
 
         function openModal(id) {
             const item = db[id];
+            if(!item) return;
+
             const isVid = item.img.toLowerCase().endsWith('.mp4');
             document.getElementById('media-view').innerHTML = isVid ? `<video id="m-video" autoplay playsinline class="modal-media"><source src="${item.img}"></video>` : `<img src="${item.img}" class="modal-media">`;
             document.getElementById('m-name').innerText = item.name;
             document.getElementById('m-desc').innerText = item.desc;
             document.getElementById('m-link').href = "tel:" + item.phone;
+            
             document.getElementById('modal').style.display = 'block';
             document.body.style.overflow = 'hidden';
             
-            progress = 0; clearInterval(timer);
-            timer = setInterval(() => {
-                progress += 1;
-                document.getElementById('progress-fill').style.width = progress + '%';
-                if (progress >= 100) closeModal();
-            }, 70); 
+            startTimer();
         }
+
+        function startTimer() {
+            progress = 0;
+            isPaused = false;
+            clearInterval(timer);
+            timer = setInterval(() => {
+                if (!isPaused) {
+                    progress += 1;
+                    document.getElementById('progress-fill').style.width = progress + '%';
+                    if (progress >= 100) closeModal();
+                }
+            }, totalTime / 100);
+        }
+
+        // توقف با تاچ
+        const touchZone = document.getElementById('modal-touch-zone');
+        touchZone.addEventListener('touchstart', () => isPaused = true);
+        touchZone.addEventListener('touchend', () => isPaused = false);
+        touchZone.addEventListener('mousedown', () => isPaused = true); // برای تست در دسکتاپ
+        touchZone.addEventListener('mouseup', () => isPaused = false);
 
         function closeModal() {
             document.getElementById('modal').style.display = 'none';
             document.body.style.overflow = 'auto';
             clearInterval(timer);
-            if(document.getElementById('m-video')) document.getElementById('m-video').pause();
+            const v = document.getElementById('m-video');
+            if(v) v.pause();
         }
 
-        // PWA Logic
-        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
-
+        // PWA
+        let deferredPrompt;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault(); deferredPrompt = e;
             document.getElementById('install-banner').style.display = 'flex';
         });
-
         document.getElementById('setup-button').addEventListener('click', () => {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((res) => {
-                    if (res.outcome === 'accepted') document.getElementById('install-banner').style.display = 'none';
-                    deferredPrompt = null;
-                });
+                deferredPrompt.userChoice.then(() => document.getElementById('install-banner').style.display = 'none');
             }
         });
 
